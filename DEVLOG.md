@@ -23,6 +23,12 @@ A running record of work done to stand up this app.
 - Added `.claude/launch.json` and `.claude/dev.sh` so the dev server (`npm run dev`) launches correctly through nvm's Node path from the Browser pane preview.
 - Verified: dev server runs on `localhost:5173` and renders "Hello World" with no styling.
 
+### React migration
+- Converted the entry point from plain TypeScript DOM manipulation to React: added `react`, `react-dom`, `@types/react`, `@types/react-dom`, and `@vitejs/plugin-react`.
+- Added [`vite.config.ts`](vite.config.ts) with the React plugin, and enabled `"jsx": "react-jsx"` in [`tsconfig.json`](tsconfig.json).
+- Renamed `src/main.ts` to [`src/main.tsx`](src/main.tsx), now mounting via `createRoot(...).render(<App />)`; added [`src/App.tsx`](src/App.tsx) rendering "Hello World"; updated [`index.html`](index.html) to load `/src/main.tsx`.
+- Verified: `tsc --noEmit` passes clean and the dev server still renders "Hello World" with no console errors.
+
 ### Next steps
 - Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
 - Build out the four dashboard widgets (weather, calendar, to-dos, quote) against that backend.
