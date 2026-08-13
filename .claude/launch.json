@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "daily-dashboard",
+      "runtimeExecutable": "/Users/zoekahana/daily-dashboard/.claude/dev.sh",
+      "runtimeArgs": [],
+      "port": 5173
+    }
+  ]
+}
