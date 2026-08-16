@@ -35,3 +35,24 @@ A running record of work done to stand up this app.
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
 - Set up Cloudflare Access for single-user gating.
 - Connect the Squarespace/Cloudflare domain to the deployed project.
+
+## 2026-08-15
+
+### Landing page widgets merged
+- Merged PR #3 (`landing-page-with-react` branch) into `main`: added [`src/App.css`](src/App.css) and extended [`src/App.tsx`](src/App.tsx) with `styled-components` `Block` elements as placeholder cards for the four widgets (Quote, Weather, To-Do, Events).
+
+### Wireframe / layout design
+- Sketched a low-fidelity wireframe of the four widgets (weather, daily quote, calendar events, to-do list) to settle the page layout before wiring up real data.
+- Layout: the quote is its own full-width block with no wrapper; the other three widgets (weather, events, to-do) are grouped in a separate grid container below it. Chose CSS Grid over flexbox for that row since the widgets need fixed, unequal column widths rather than flex-grow ratios, and it makes a future single-column mobile breakpoint a one-line change.
+
+### Applied to App.tsx (uncommitted)
+- Wrapped the Weather/To-Do/Events `Block`s in a new `WidgetGrid` styled-component (`display: grid; grid-auto-flow: column; grid-template-columns: 3fr 2fr 1fr`), keeping `Quote` as a standalone sibling block.
+- Reduced `Block` margin from `50px` to `20px` to tighten spacing now that widgets sit in a grid.
+
+### Next steps
+- Commit the `WidgetGrid` layout change.
+- Replace placeholder widget content with real weather, quote, calendar, and to-do data.
+- Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
+- Set up Cloudflare Access for single-user gating.
+- Connect the Squarespace/Cloudflare domain to the deployed project.
