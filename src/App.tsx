@@ -52,7 +52,7 @@ const Title = styled.h1`
   font-family: monospace;
 `
 
-const Block = styled.div`
+const Block = styled.div<{ $accent: string; $rotate: string }>`
   background-color: #ddd4b7;
   padding: 20px 0px 100px 50px;
   border-radius: 30px;
