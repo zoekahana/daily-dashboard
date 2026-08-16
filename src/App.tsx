@@ -7,15 +7,17 @@ const App = () => {
     <Block>
       <Title>Quote</Title>
     </Block>
-    <Block>
-      <Title>Weather</Title>
-    </Block>
-    <Block>
-      <Title>To-Do</Title>
-    </Block>
-    <Block>
-      <Title>Events</Title>
-    </Block>
+    <WidgetGrid>
+      <Block>
+        <Title>Weather</Title>
+      </Block>
+      <Block>
+        <Title>To-Do</Title>
+      </Block>
+      <Block>
+        <Title>Events</Title>
+      </Block>
+    </WidgetGrid>
   </>
 }
 
@@ -32,7 +34,13 @@ const Block = styled.div`
   background-color: cornflowerblue;
   padding: 20px 0px 100px 50px;
   border-radius: 30px;
-  margin: 50px;
+  margin: 20px;
+`
+
+const WidgetGrid = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 3fr 2fr 1fr;
 `
 
 export default App
