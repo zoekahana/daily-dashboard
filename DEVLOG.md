@@ -56,3 +56,34 @@ A running record of work done to stand up this app.
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
 - Set up Cloudflare Access for single-user gating.
 - Connect the Squarespace/Cloudflare domain to the deployed project.
+
+## 2026-08-16
+
+### Field Notes visual direction
+- Explored several aesthetic directions for the widget layout (paper/notebook, dark weather-led, terminal-inspired) and picked **Field Notes**: a paper-planner look with a dot-grid buff background, serif type, and widgets styled as index cards held down by tape.
+- Explored multiple color palettes and multicolor variants for Field Notes before settling on buff paper + red ink accent + teal tape (rather than matching the tape color to the text accent).
+- Explored serif/monospace font pairings before landing on Didot for display type and a monospace stack for widget labels.
+
+### Applied to App.css / App.tsx (uncommitted)
+- [`src/App.css`](src/App.css): replaced the placeholder pink/white color scheme with the buff-paper (`#e6dfc9`) / ink (`#212a3b`) palette, added a dot-grid texture via a tiled `radial-gradient`, and switched the body font to `Didot`.
+- [`src/App.tsx`](src/App.tsx):
+  - Added a `HeaderGrid` wrapping `Greeting` ("Good morning, Zoe.") and a new `DateSubheader` ("It's August 15, 2026."), placed at opposite ends of the header row.
+  - `Block` now takes `$accent` and `$rotate` props and grew a second pseudo-element: `::before` and `::after` each render a small rotated "tape" strip at opposite corners, so every widget reads as a hand-taped index card. All four widgets currently share the same teal accent (`#1f6e64`) and rotation (`-0.4deg`) &mdash; per-widget color coding was explored but not applied.
+  - Added `BlockBody` for widget copy, with a placeholder line per widget (e.g. "It's a beautiful day!", "Everything handled.").
+  - `WidgetGrid` columns changed from `3fr 2fr 1fr` to `3fr 3fr 2fr`.
+
+### Favicon fix
+- `favicon.ico` was sitting at the repo root and wasn't actually a valid ICO &mdash; it was a 512&times;512 PNG saved with a `.ico` extension, so Vite never served it from a location the browser would check, and the declared MIME type didn't match the content anyway.
+- Moved it into `public/` (the only directory Vite serves as static assets) as `favicon.png`, and added `<link rel="icon" type="image/png" href="/favicon.png">` to [`index.html`](index.html). Verified correct serving directly over HTTP (`200`, `Content-Type: image/png`, correct byte count).
+- Still not appearing in Safari's tab after a relaunch attempt; the PNG renders fine when opened directly as a page, so this is Safari's separate favicon-specific cache, not the file or the server. Unresolved &mdash; next step is clearing Safari's site data for `localhost` (or its on-disk favicon cache) if a full quit/relaunch doesn't clear it.
+
+### Next steps
+- Resolve the Safari favicon caching.
+- Decide on a header-vs-dot-grid legibility fix &mdash; clearing the dot band behind the header, thinning the dots overall, adding a rule underneath, or making the header heavier (mocked up, not yet chosen).
+- Decide on quote treatment &mdash; boxed and taped like the other widgets, or floating italic with no card (mocked up, not yet chosen).
+- Give `Didot` a fallback in the font stack (currently a bare `font-family: Didot`).
+- Replace placeholder widget content with real weather, quote, calendar, and to-do data.
+- Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
+- Set up Cloudflare Access for single-user gating.
+- Connect the Squarespace/Cloudflare domain to the deployed project.
