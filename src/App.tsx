@@ -3,44 +3,98 @@ import styled from 'styled-components';
 
 const App = () => {
   return <>
-    <Greeting>Good morning, Zoe.</Greeting>
-    <Block>
+    <HeaderGrid>
+      <Greeting>Good morning, Zoe.</Greeting>
+      <DateSubheader>It's August 15, 2026.</DateSubheader>
+    </HeaderGrid>
+    <Block $accent="#1f6e64" $rotate="-0.4deg">
       <Title>Quote</Title>
+      <BlockBody>Lorem ipsum...</BlockBody>
     </Block>
     <WidgetGrid>
-      <Block>
+      <Block $accent="#1f6e64" $rotate="-0.4deg">
         <Title>Weather</Title>
+        <BlockBody>It's a beautiful day!</BlockBody>
       </Block>
-      <Block>
+      <Block $accent="#1f6e64" $rotate="-0.4deg">
         <Title>To-Do</Title>
+        <BlockBody>Everything handled.</BlockBody>
       </Block>
-      <Block>
+      <Block $accent="#1f6e64" $rotate="-0.4deg">
         <Title>Events</Title>
+        <BlockBody>Empty calendar.</BlockBody>
       </Block>
     </WidgetGrid>
   </>
 }
 
+const HeaderGrid = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+`
+
 const Greeting = styled.h1`
-  font-size: 50px;
+  font-size: 60px;
+  justify-self: left;
+  margin: 20px 0 20px 50px;
+`
+
+const DateSubheader = styled.h2`
+  font-size: 30px;
+  justify-self: right;
+  margin: 20px 50px 20px 0;
 `
 
 const Title = styled.h1`
-  color: chartreuse;
-  text-align: left
+  color: #a2222b;
+  text-align: left;
+  font-family: monospace;
 `
 
 const Block = styled.div`
-  background-color: cornflowerblue;
+  background-color: #ddd4b7;
   padding: 20px 0px 100px 50px;
   border-radius: 30px;
   margin: 20px;
+
+  position: relative;
+  transform: rotate(${p => p.$rotate});
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 30px;
+    width: 50px;
+    height: 12px;
+    background: ${p => p.$accent};
+    opacity: 0.6;
+    transform: rotate(-2deg);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    right: 30px;
+    width: 50px;
+    height: 12px;
+    background: ${p => p.$accent};
+    opacity: 0.6;
+    transform: rotate(-2deg);
+  }
+`
+
+const BlockBody = styled.div`
+  text-align: left;
+  font-size: 15px;
 `
 
 const WidgetGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 3fr 2fr 1fr;
+  grid-template-columns: 3fr 3fr 2fr;
 `
 
 export default App

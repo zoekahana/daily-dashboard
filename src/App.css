@@ -1,6 +1,9 @@
 body {
-    background-color: rgb(246, 210, 221);
-    color: white;
-    font-family: Verdana;
+    background-color: #e6dfc9;
+    color: #212a3b;
+    font-family: Didot;
     text-align: center;
+    opacity: 0.8;
+    background-image: radial-gradient(circle, #c3b78f 1.2px, transparent 1.2px);
+    background-size: 15px 15px;
 }
