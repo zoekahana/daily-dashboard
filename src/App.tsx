@@ -1,5 +1,6 @@
 import './App.css'
 import styled from 'styled-components';
+import WidgetCard from './components/WidgetCard';
 
 const App = () => {
   return <>
@@ -7,23 +8,11 @@ const App = () => {
       <Greeting>Good morning, Zoe.</Greeting>
       <DateSubheader>It's August 15, 2026.</DateSubheader>
     </HeaderGrid>
-    <Block $accent="#1f6e64" $rotate="-0.4deg">
-      <Title>Quote</Title>
-      <BlockBody>Lorem ipsum...</BlockBody>
-    </Block>
+    <WidgetCard title="Quote" children="Lorem ipsum..." />
     <WidgetGrid>
-      <Block $accent="#1f6e64" $rotate="-0.4deg">
-        <Title>Weather</Title>
-        <BlockBody>It's a beautiful day!</BlockBody>
-      </Block>
-      <Block $accent="#1f6e64" $rotate="-0.4deg">
-        <Title>To-Do</Title>
-        <BlockBody>Everything handled.</BlockBody>
-      </Block>
-      <Block $accent="#1f6e64" $rotate="-0.4deg">
-        <Title>Events</Title>
-        <BlockBody>Empty calendar.</BlockBody>
-      </Block>
+      <WidgetCard title="Weather" children="It's a beautiful day!" />
+      <WidgetCard title="To-Do" children="Everything handled." />
+      <WidgetCard title="Events" children="Empty calendar." />
     </WidgetGrid>
   </>
 }
@@ -59,52 +48,6 @@ const DateSubheader = styled.h2`
     justify-self: center;
     margin: 0 20px 20px 20px;
   }
-`
-
-const Title = styled.h1`
-  color: #a2222b;
-  text-align: left;
-  font-family: monospace;
-`
-
-const Block = styled.div<{ $accent: string; $rotate: string }>`
-  background-color: #ddd4b7;
-  padding: 20px 30px 100px 30px;
-  border-radius: 30px;
-  margin: 20px;
-
-  position: relative;
-  transform: rotate(${p => p.$rotate});
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -6px;
-    left: 30px;
-    width: 50px;
-    height: 12px;
-    background: ${p => p.$accent};
-    opacity: 0.6;
-    transform: rotate(-2deg);
-  }
-
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    right: 30px;
-    width: 50px;
-    height: 12px;
-    background: ${p => p.$accent};
-    opacity: 0.6;
-    transform: rotate(-2deg);
-  }
-`
-
-const BlockBody = styled.div`
-  text-align: left;
-  font-size: 15px;
-  margin: 0 20px 0 0;
 `
 
 const WidgetGrid = styled.div`
