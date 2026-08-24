@@ -32,18 +32,33 @@ const HeaderGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
   align-items: center;
+
+  @media (max-width: 768px) {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+  }
 `
 
 const Greeting = styled.h1`
   font-size: 60px;
   justify-self: left;
   margin: 20px 0 20px 50px;
+
+  @media (max-width: 768px) {
+    justify-self: center;
+    margin: 20px;
+  }
 `
 
 const DateSubheader = styled.h2`
   font-size: 30px;
   justify-self: right;
   margin: 20px 50px 20px 0;
+
+  @media (max-width: 768px) {
+    justify-self: center;
+    margin: 0 20px 20px 20px;
+  }
 `
 
 const Title = styled.h1`
@@ -54,7 +69,7 @@ const Title = styled.h1`
 
 const Block = styled.div<{ $accent: string; $rotate: string }>`
   background-color: #ddd4b7;
-  padding: 20px 0px 100px 50px;
+  padding: 20px 30px 100px 30px;
   border-radius: 30px;
   margin: 20px;
 
@@ -89,12 +104,18 @@ const Block = styled.div<{ $accent: string; $rotate: string }>`
 const BlockBody = styled.div`
   text-align: left;
   font-size: 15px;
+  margin: 0 20px 0 0;
 `
 
 const WidgetGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 3fr 3fr 2fr;
+
+  @media (max-width: 768px) {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+  }
 `
 
 export default App
