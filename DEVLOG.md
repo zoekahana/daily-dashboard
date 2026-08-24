@@ -75,10 +75,10 @@ A running record of work done to stand up this app.
 ### Favicon fix
 - `favicon.ico` was sitting at the repo root and wasn't actually a valid ICO &mdash; it was a 512&times;512 PNG saved with a `.ico` extension, so Vite never served it from a location the browser would check, and the declared MIME type didn't match the content anyway.
 - Moved it into `public/` (the only directory Vite serves as static assets) as `favicon.png`, and added `<link rel="icon" type="image/png" href="/favicon.png">` to [`index.html`](index.html). Verified correct serving directly over HTTP (`200`, `Content-Type: image/png`, correct byte count).
-- Still not appearing in Safari's tab after a relaunch attempt; the PNG renders fine when opened directly as a page, so this is Safari's separate favicon-specific cache, not the file or the server. Unresolved &mdash; next step is clearing Safari's site data for `localhost` (or its on-disk favicon cache) if a full quit/relaunch doesn't clear it.
+- Wasn't appearing in Safari's tab even after a relaunch and clearing Safari's site data for `localhost`; the PNG rendered fine when opened directly as a page, which pointed at Safari's separate favicon-specific cache rather than the file or the server.
+- **Resolved**: Safari keeps a distinct on-disk favicon database at `~/Library/Safari/Favicon Cache`, separate from the page cache and site-data cache. It has to be cleared *while Safari is fully quit* &mdash; clearing it with Safari still running just let it get rewritten from the in-memory copy. Quit Safari, deleted that folder, relaunched, and the correct icon showed up immediately.
 
 ### Next steps
-- Resolve the Safari favicon caching.
 - Decide on a header-vs-dot-grid legibility fix &mdash; clearing the dot band behind the header, thinning the dots overall, adding a rule underneath, or making the header heavier (mocked up, not yet chosen).
 - Decide on quote treatment &mdash; boxed and taped like the other widgets, or floating italic with no card (mocked up, not yet chosen).
 - Give `Didot` a fallback in the font stack (currently a bare `font-family: Didot`).
