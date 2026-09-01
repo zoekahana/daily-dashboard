@@ -51,33 +51,6 @@ const DateSubheader = styled.h2`
   }
 `
 
-const Title = styled.h1`
-  color: #a2222b;
-  text-align: left;
-  font-family: monospace;
-`
-
-const Block = styled.div<{ $accent: string; $rotate: string }>`
-  background-color: #ddd4b7;
-  padding: 20px 30px 100px 30px;
-  border-radius: 30px;
-  margin: 20px;
-
-  position: relative;
-  transform: rotate(${p => p.$rotate});
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -6px;
-    left: 30px;
-    width: 50px;
-    height: 12px;
-    background: ${p => p.$accent};
-    opacity: 0.6;
-    transform: rotate(-2deg);
-  }
-
   &::after {
     content: "";
     position: absolute;
@@ -89,12 +62,6 @@ const Block = styled.div<{ $accent: string; $rotate: string }>`
     opacity: 0.6;
     transform: rotate(-2deg);
   }
-`
-
-const BlockBody = styled.div`
-  text-align: left;
-  font-size: 15px;
-  margin: 0 20px 0 0;
 `
 
 const WidgetGrid = styled.div`
