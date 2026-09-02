@@ -2,15 +2,13 @@ import styled from 'styled-components';
 import WidgetCard from '../components/WidgetCard';
 import {
     SunIcon,
-    PartlyCloudyIcon,
     CloudyIcon,
-    FogIcon,
-    RainIcon,
-    SleetIcon,
-    SnowIcon,
-    ThunderIcon,
-    WindIcon
 } from './WeatherIcons';
+
+const weatherIcons = {
+    sunny: SunIcon,
+    cloudy: CloudyIcon,
+} as const;
 
 type DayContainerProps = React.PropsWithChildren<{
     day: string;
@@ -25,13 +23,17 @@ const DayContainerFlex = styled.div`
     justify-items: center;
 `;
 
-const DayContainer = ({day, high, low, condition}: DayContainerProps) => 
-    <DayContainerFlex>
-        <h4>{day}</h4>
-        <FogIcon />
-        <h5>{high}</h5>
-        <h5>{low}</h5>
-    </DayContainerFlex>
+const DayContainer = ({day, high, low, condition}: DayContainerProps) => {
+    const Icon = weatherIcons[condition as keyof typeof weatherIcons] ?? SunIcon;
+    return (
+        <DayContainerFlex>
+            <h4>{day}</h4>
+            <Icon />
+            <h5>{high}</h5>
+            <h5>{low}</h5>
+        </DayContainerFlex>
+    );
+}
 
 const DayContainerGrid = styled.div`
     display: grid;
