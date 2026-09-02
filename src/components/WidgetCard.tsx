@@ -46,10 +46,9 @@ const CardBody = styled.div`
   margin: 0 20px 0 0;
 `
 
-type WidgetCardProps = {
+type WidgetCardProps = React.PropsWithChildren<{
     title: string;
-    children: React.ReactNode;
-}
+}>;
 
 const WidgetCard = ({title, children}: WidgetCardProps) =>
     <Card>

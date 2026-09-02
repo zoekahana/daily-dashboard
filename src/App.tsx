@@ -1,5 +1,6 @@
 import './App.css'
 import styled from 'styled-components';
+import Weather from './widgets/Weather';
 import WidgetCard from './components/WidgetCard';
 
 const App = () => {
@@ -10,7 +11,7 @@ const App = () => {
     </HeaderGrid>
     <WidgetCard title="Quote" children="Lorem ipsum..." />
     <WidgetGrid>
-      <WidgetCard title="Weather" children="It's a beautiful day!" />
+      <Weather />
       <WidgetCard title="To-Do" children="Everything handled." />
       <WidgetCard title="Events" children="Empty calendar." />
     </WidgetGrid>

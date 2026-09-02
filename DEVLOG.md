@@ -87,3 +87,35 @@ A running record of work done to stand up this app.
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
 - Set up Cloudflare Access for single-user gating.
 - Connect the Squarespace/Cloudflare domain to the deployed project.
+
+## 2026-08-31
+
+### WidgetCard extracted into a shared component
+- Moved the shared card shell out of `App.tsx` into [`src/components/WidgetCard.tsx`](src/components/WidgetCard.tsx) as its own component taking `title` and `children` props, so every widget gets the same shape/tape/typography without each widget file redeclaring the styled-components itself.
+- Hit two real bugs during the move, both silent until runtime: a missing `import styled from 'styled-components'`, and `export default WidgetCard = styled.div...` (assigning to a never-declared variable). Vite's dev transform doesn't run TypeScript's type checker (that only happens via `tsc` in the build script), so neither was caught until the browser threw a `ReferenceError` and the whole app rendered blank.
+- `App.tsx` still has its old local `Title`/`Block`/`BlockBody` styled-components defined but unused now that Quote/To-Do/Events call `<WidgetCard title="..." children="..." />` directly &mdash; dead code worth removing.
+
+### Weather widget built out ([`src/widgets/Weather.tsx`](src/widgets/Weather.tsx))
+- New widget file: a `WeatherBody` (city/condition) plus a `DayContainerGrid` of `DayContainer`s for the 5-day forecast, composed inside the shared `WidgetCard`.
+- `WeatherBody` had an Automatic Semicolon Insertion bug &mdash; `return` on its own line before the JSX meant it silently executed as `return;`, so the whole body rendered nothing.
+- Wanted the forecast laid out as a transposed table (day/high/low as three shared rows across 5 day-columns). Since `DayContainer` returns a Fragment with no wrapping element, its three children land as direct, independent items in `DayContainerGrid` &mdash; fixed by declaring `grid-template-rows: repeat(3, auto)` alongside `grid-auto-flow: column`, so the grid wraps into a new column every 3 items instead of spreading all 15 into one implicit row.
+- Also caught along the way: `high`/`low` typed as `number` but initially passed as string literals; four of five forecast days accidentally copy-pasted as `day="TUE"`; `condition` declared and passed but never actually used to pick a rendered icon (`DayContainer` currently always renders `<SunIcon />` regardless of `condition`).
+
+### Weather icons ([`src/widgets/WeatherIcons.tsx`](src/widgets/WeatherIcons.tsx))
+- Sourced 9 SVG files (sunny, partly-cloudy, cloudy, fog, rain, sleet, snow, thunder, wind) into `src/assets/icons/`, covering the core weather conditions.
+- First attempt tried `<svg path="../assets/sun.svg" .../>` &mdash; not valid (SVG has no attribute for loading an external file), the path was wrong besides (missing the `icons/` folder, wrong filename), and the tag was self-closing with no shapes inside it regardless.
+- Decided against `<img src="...">` for these (would display them, but as opaque images with no way to recolor via `currentColor`/CSS) in favor of inlining the real markup, so the icons can be themed against the Field Notes palette.
+- Converted all 9 by hand: kept each file's `viewBox` and actual shape elements (`path`/`circle`/`line`/`rect`); dropped XML declarations, comments, `<title>`/`<desc>`, unused `xmlns:xlink`, decorative ids, and `<defs><style>`+`class` blocks (redundant &mdash; SVG's `fill`/`stroke`/etc. are inheritable, so setting them once on a wrapping `<g>` does the same job without colliding with JSX's own use of `{}`); camelCased hyphenated attributes (`stroke-width` &rarr; `strokeWidth`); replaced every hardcoded fill/stroke color with `currentColor`.
+- Caught one real rendering bug in the process: `SunIcon`'s `viewBox` had been changed to `0 0 48 48` to match the other icons' convention, but its circle/line coordinates were calibrated for `0 0 24 24` &mdash; would have rendered tiny and shoved into a corner. Fixed by keeping `viewBox="0 0 24 24"` (matching the real coordinates) while standardizing rendered `width`/`height` to `24` across all 9 icons regardless of each file's native viewBox.
+
+### Next steps
+- Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon`.
+- Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
+- Remove the now-dead `Title`/`Block`/`BlockBody` styled-components left over in `App.tsx`.
+- Decide on a header-vs-dot-grid legibility fix (still open from 2026-08-16).
+- Decide on quote treatment &mdash; boxed and taped vs. floating italic (still open from 2026-08-16).
+- Give `Didot` a fallback in the font stack (currently a bare `font-family: Didot`).
+- Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
+- Set up Cloudflare Access for single-user gating.
+- Connect the Squarespace/Cloudflare domain to the deployed project.
