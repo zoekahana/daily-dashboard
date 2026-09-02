@@ -51,19 +51,6 @@ const DateSubheader = styled.h2`
   }
 `
 
-  &::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    right: 30px;
-    width: 50px;
-    height: 12px;
-    background: ${p => p.$accent};
-    opacity: 0.6;
-    transform: rotate(-2deg);
-  }
-`
-
 const WidgetGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
