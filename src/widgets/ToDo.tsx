@@ -45,7 +45,7 @@ const ToDoLabel = styled.label`
     min-height: 30px;
 `;
 
-const ToDoItem = ({ label: string }) => {
+const ToDoItem = ({label}: {label: string}) => {
 
     const [isCompleted, setIsCompleted] = useState(false);
 
