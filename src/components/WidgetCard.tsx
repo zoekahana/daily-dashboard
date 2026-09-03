@@ -40,7 +40,7 @@ const Title = styled.h1`
   font-family: monospace;
 `
 
-const CardBody = styled.div`
+const CardBody = styled.div<{ $isGridWidget: boolean }>`
   text-align: left;
   font-size: 15px;
   margin: 0 20px 0 0;
