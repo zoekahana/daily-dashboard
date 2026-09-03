@@ -119,3 +119,31 @@ A running record of work done to stand up this app.
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
 - Set up Cloudflare Access for single-user gating.
 - Connect the Squarespace/Cloudflare domain to the deployed project.
+
+## 2026-09-03
+
+### To-Do widget built out ([`src/widgets/ToDo.tsx`](src/widgets/ToDo.tsx))
+- Found the file already had raw CSS (`.checkbox-wrapper input[type="checkbox"] { ... }`) pasted directly into the component body — not valid JS/TSX, so it was throwing a hard parse error. Converted it into a real `styled.input` (`ToDoCheckbox`), matching the `styled-components` convention already used in `Weather.tsx`.
+- Added a custom checkmark via `&:checked::before { content: ... }`. Hit two escaping bugs getting there: `content: "2714"` needed the backslash (`\2714`, the Unicode point for ✔) that got stripped from the source tutorial; and once added, `"\2714"` inside a JS template literal collided with JS's own escape parsing (`\2` reads as a legacy octal escape, disallowed in strict-mode ES modules) — fixed with a double backslash (`"\\2714"`) so CSS receives the literal escape.
+- Checkmark then rendered in the corner of the whole widget card instead of on the checkbox — `position: absolute` on `&:checked::before` had no positioned ancestor to anchor to, since the base `ToDoCheckbox` rule was missing `position: relative`. Added it.
+- Laid out checkbox + label in a grid (`ToDoLabel`, wrapping the existing `<label>`). Went through a few broken attempts before landing on the fix: `align-items: left` is invalid CSS (`align-items` never accepts `left`/`right` — only inline-axis properties like `justify-items`/`justify-content` do); separately, `grid-auto-flow: column` with no `grid-template-columns` let the two implicit `auto` columns split the full row width via `justify-content: normal` (which behaves as stretch in Grid), spreading the checkbox and label apart instead of grouping them. Fixed with an explicit `grid-template-columns: auto 1fr`.
+- Added `ToDoTask` (a `styled.span`) to strike through completed items. First pass referenced `isCompleted` as a bare variable inside the template literal — doesn't work, since styled-components interpolations are functions evaluated per-render against that instance's props, not closures over outer scope; fixed to `${(props) => props.isCompleted ? "line-through" : "none"}`.
+- That triggered a React DOM warning (`isCompleted` isn't a valid HTML attribute, and styled-components forwards unknown props straight to the DOM by default). Fixed using styled-components v6's transient-prop convention — renamed to `$isCompleted` in both the styled-component definition and the JSX usage, which tells styled-components to consume it for styling only, not forward it.
+- Added dashed dividers between to-do items (skipping the last) via `& > *:not(:last-child)`. `border-bottom: dotted` worked but rendered a visibly thicker, squished dot at the end of each line — inherent behavior of `dotted`/`dashed` borders, which favor flush edges over uniform dot spacing when the line length isn't an exact multiple of the dot pitch. Replaced with a `repeating-linear-gradient` on `background-image` instead (`border-bottom` can't take a gradient value directly — the whole declaration gets silently dropped as invalid if you try). Also caught a `to-right` typo (needs a space, not a hyphen — `to right`) that likewise invalidated the whole gradient function.
+- Chased a report of one divider line looking visibly thicker than the others. Computed-style inspection showed all dividers had identical `background-size` and row heights differing by ~0.0002px — traced to CSS Grid producing non-integer row heights, with each row's fractional pixel offset interacting differently with the display's pixel grid at that zoom level. Confirmed as a genuine sub-pixel anti-aliasing artifact (not a real CSS bug) by zooming in, where it disappeared. Decided not to convert the checkbox's `em`-based sizing to fixed `px` to "fix" it, since it isn't actually broken and `em`-based sizing keeps the checkbox scaling with the widget's font size.
+
+### Working agreement
+- Added [`CLAUDE.md`](CLAUDE.md) at the repo root: going forward, no edits get made without asking first — default assumption is that questions are for explanations/answers, not applied changes.
+
+### Next steps
+- To-do items are still hardcoded labels (`zoe`, `kahana`, `thomas`, `jankovic`) with no persistence, add/remove, or backing data — needs real state once the Worker/D1 backend exists.
+- Remove the now-unused `.checkbox-wrapper` div/class in `ToDo.tsx`, a leftover from the original (invalid) CSS-class approach.
+- Decide on a header-vs-dot-grid legibility fix (still open from 2026-08-16).
+- Decide on quote treatment — boxed and taped vs. floating italic (still open from 2026-08-16).
+- Give `Didot` a fallback in the font stack (currently a bare `font-family: Didot`).
+- Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon` (still open from 2026-08-31).
+- Remove the now-dead `Title`/`Block`/`BlockBody` styled-components left over in `App.tsx` (still open from 2026-08-31).
+- Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
+- Set up Cloudflare Access for single-user gating.
+- Connect the Squarespace/Cloudflare domain to the deployed project.
