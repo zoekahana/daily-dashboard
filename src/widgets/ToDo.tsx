@@ -29,6 +29,7 @@ const ToDoCheckbox = styled.input`
 `;
 
 const ToDoTask = styled.span<{ $isCompleted: boolean }>`
+    color: ${(props) => props.$isCompleted ? "#656669" : "#212a3b"};
     text-decoration: ${(props) => props.$isCompleted ? "line-through" : "none"};
 `;
 
