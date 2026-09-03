@@ -3,10 +3,8 @@ import { useState } from 'react';
 import WidgetCard from '../components/WidgetCard';
 
 const ToDoCheckbox = styled.input`
-    /* removing default appearance */
     -webkit-appearance: none;
     appearance: none;
-    /* creating a custom design */
     width: 2em;
     height: 2em;
     border-radius: 0.25em;
