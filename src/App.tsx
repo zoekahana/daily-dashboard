@@ -1,9 +1,9 @@
 import './App.css'
 import styled from 'styled-components';
+import Events from './widgets/Events';
 import Quote from './widgets/Quote';
 import ToDo from './widgets/ToDo';
 import Weather from './widgets/Weather';
-import WidgetCard from './components/WidgetCard';
 
 const App = () => {
   return <>
@@ -15,7 +15,7 @@ const App = () => {
     <WidgetGrid>
       <Weather />
       <ToDo />
-      <WidgetCard title="Events" children="Empty calendar." />
+      <Events />
     </WidgetGrid>
   </>
 }
