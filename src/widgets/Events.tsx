@@ -10,6 +10,7 @@ const EventTime = styled.div`
 
 const EventTitle = styled.div`
     font-size: 20px;
+    font-family: Georgia;
 `;
 
 const Event = styled.div`
@@ -26,7 +27,7 @@ const EventWrapper = styled.div`
     align-items: center;
 `;
 
-const EventItemProps = React.PropsWithChildren<{
+type EventItemProps = React.PropsWithChildren<{
     time: string;
     title: string;
 }>;
