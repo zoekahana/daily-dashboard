@@ -73,8 +73,8 @@ const ToDoList = styled.div`
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,
-            #212a3b 0px,
-            #212a3b 4px,
+            #9e926a 0px,
+            #9e926a 4px,
             transparent 4px,
             transparent 8px
         );
