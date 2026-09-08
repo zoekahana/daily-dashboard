@@ -40,14 +40,45 @@ const DayContainerGrid = styled.div`
     grid-auto-flow: column;
 `;
 
-const WeatherBody = () => {
-    return (
-        <>
-            <h1>Dallas, TX</h1>
-            <h2>68 and sunny</h2>
-        </>
-    )
-}
+const Location = styled.div`
+    font-size: 20pt;
+`;
+
+const Temperature = styled.div`
+    font-size: 64pt;
+    &::after {
+        content:"\\00B0";
+    }
+`;
+
+const DetailsColumn = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const WeatherBodyWrapper = styled.div`
+    display: grid;
+    grid-auto-flow: column;
+`;
+
+const IconColumn = styled.div`
+    display: flex;
+    flex: 1;
+    justify-content: right;
+`;
+
+const WeatherBody = () => 
+    <>
+        <WeatherBodyWrapper>
+            <DetailsColumn>
+                <Location>Dallas, TX</Location>
+                <Temperature>72</Temperature>
+            </DetailsColumn>
+            <IconColumn>
+                <SunIcon />
+            </IconColumn>
+        </WeatherBodyWrapper>
+    </>
 
 const Weather = () => 
     <WidgetCard title="Weather">
