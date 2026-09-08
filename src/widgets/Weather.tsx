@@ -33,6 +33,33 @@ const ForecastDay = styled.div`
 const ForecastTemps = styled.div`
     font-size: 12pt;
     font-family: Georgia;
+    display: flex;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 10px;
+    }
+`;
+
+const High = styled.span`
+    &::after {
+        content:"° / ";
+    }
+
+    @media (max-width: 768px) {
+        &::after {
+            content:"°";
+        }
+    }
+`;
+
+const Low = styled.span`
+    &::after {
+        content:"°";
+    }
+
+    @media (max-width: 768px) {
+        color: #656669;
+    }
 `;
 
 const DayContainer = ({day, high, low, condition}: DayContainerProps) => {
@@ -41,7 +68,10 @@ const DayContainer = ({day, high, low, condition}: DayContainerProps) => {
         <DayContainerFlex>
             <ForecastDay>{day}</ForecastDay>
             <Icon size={36}/>
-            <ForecastTemps>{high}° / {low}°</ForecastTemps>
+            <ForecastTemps>
+                <High>{high}</High>
+                <Low>{low}</Low>
+            </ForecastTemps>
         </DayContainerFlex>
     );
 }
