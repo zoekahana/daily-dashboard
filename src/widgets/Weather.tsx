@@ -34,21 +34,13 @@ const ForecastTemps = styled.div`
     font-size: 12pt;
     font-family: Georgia;
     display: flex;
-    @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 10px;
-    }
+    flex-direction: column;
+    gap: 10px;
 `;
 
 const High = styled.span`
     &::after {
-        content:"° / ";
-    }
-
-    @media (max-width: 768px) {
-        &::after {
-            content:"°";
-        }
+        content:"°";
     }
 `;
 
@@ -56,10 +48,7 @@ const Low = styled.span`
     &::after {
         content:"°";
     }
-
-    @media (max-width: 768px) {
-        color: #656669;
-    }
+    color: #656669;
 `;
 
 const DayContainer = ({day, high, low, condition}: DayContainerProps) => {
