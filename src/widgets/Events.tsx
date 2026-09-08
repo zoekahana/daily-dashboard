@@ -21,10 +21,16 @@ const Event = styled.div`
     padding-bottom: 8px;
 `;
 
-const EventList = styled.div`
+const EventWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+`;
+
+const EventList = styled.div`
+    display: grid;
+    grid-auto-flow: row;
+    flex: 1;
+    grid-auto-rows: 1fr;
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,
@@ -42,22 +48,30 @@ const EventList = styled.div`
 const Events = () =>
     <WidgetCard title="Events">
         <EventList>
-            <Event>
-                <EventTime>9:00</EventTime>
-                <EventTitle>Coffee with Thomas</EventTitle>
-            </Event>
-            <Event>
-                <EventTime>11:00</EventTime>
-                <EventTitle>Brunch with Thomas</EventTitle>
-            </Event>
-            <Event>
-                <EventTime>12:00</EventTime>
-                <EventTitle>Lunch with Thomas</EventTitle>
-            </Event>
-            <Event>
-                <EventTime>5:00</EventTime>
-                <EventTitle>Pickleball with Thomas</EventTitle>
-            </Event>
+            <EventWrapper>
+                <Event>
+                    <EventTime>9:00</EventTime>
+                    <EventTitle>Coffee with Thomas</EventTitle>
+                </Event>
+            </EventWrapper>
+            <EventWrapper>
+                <Event>
+                    <EventTime>11:00</EventTime>
+                    <EventTitle>Brunch with Thomas</EventTitle>
+                </Event>
+            </EventWrapper>
+            <EventWrapper>
+                <Event>
+                    <EventTime>12:00</EventTime>
+                    <EventTitle>Lunch with Thomas</EventTitle>
+                </Event>
+            </EventWrapper>
+            <EventWrapper>
+                <Event>
+                    <EventTime>5:00</EventTime>
+                    <EventTitle>Pickleball with Thomas</EventTitle>
+                </Event>
+            </EventWrapper>
         </EventList>
     </WidgetCard>
 

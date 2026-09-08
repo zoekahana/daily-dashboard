@@ -39,11 +39,12 @@ const ToDoLabel = styled.label`
     justify-items: start;
     grid-template-columns: auto 1fr;
     align-items: center;
-    padding-top: 4px;
-    padding-bottom: 8px;
-    gap: 4px;
     font-size: 20px;
-    min-height: 30px;
+`;
+
+const ToDoItemWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ToDoItem = ({label}: {label: string}) => {
@@ -51,22 +52,24 @@ const ToDoItem = ({label}: {label: string}) => {
     const [isCompleted, setIsCompleted] = useState(false);
 
     return (
-        <div className="checkbox-wrapper">
+        <ToDoItemWrapper>
             <ToDoLabel>
-                <ToDoCheckbox 
-                    type="checkbox" 
-                    checked={isCompleted} 
+                <ToDoCheckbox
+                    type="checkbox"
+                    checked={isCompleted}
                     onChange={() => setIsCompleted((isCompleted) => !isCompleted)}
                 />
                 <ToDoTask $isCompleted={isCompleted}>{label}</ToDoTask>
             </ToDoLabel>
-        </div>
+        </ToDoItemWrapper>
     )
 }
 
 const ToDoList = styled.div`
     display: grid;
     grid-auto-flow: row;
+    flex: 1;
+    grid-auto-rows: 1fr;
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,

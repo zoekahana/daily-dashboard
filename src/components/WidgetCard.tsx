@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 const Card = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: #ddd4b7;
   padding: 20px 30px 20px 30px;
   border-radius: 30px;
@@ -41,6 +43,10 @@ const Title = styled.h1`
 `
 
 const CardBody = styled.div`
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   text-align: left;
   font-size: 15px;
   margin: 0 20px 0 0;
