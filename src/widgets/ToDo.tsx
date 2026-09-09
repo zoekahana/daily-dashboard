@@ -46,6 +46,10 @@ const ToDoLabel = styled.label`
 const ToDoItemWrapper = styled.div`
     display: flex;
     align-items: center;
+
+    @media (max-width: 768px) {
+        padding: 10px 0px;
+    }
 `;
 
 const ToDoItem = ({label}: {label: string}) => {
