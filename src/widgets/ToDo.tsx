@@ -31,6 +31,7 @@ const ToDoCheckbox = styled.input`
 const ToDoTask = styled.span<{ $isCompleted: boolean }>`
     color: ${(props) => props.$isCompleted ? "#656669" : "#212a3b"};
     text-decoration: ${(props) => props.$isCompleted ? "line-through" : "none"};
+    font-family: Georgia;
 `;
 
 const ToDoLabel = styled.label`
@@ -39,11 +40,16 @@ const ToDoLabel = styled.label`
     justify-items: start;
     grid-template-columns: auto 1fr;
     align-items: center;
-    padding-top: 4px;
-    padding-bottom: 8px;
-    gap: 4px;
     font-size: 20px;
-    min-height: 30px;
+`;
+
+const ToDoItemWrapper = styled.div`
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 768px) {
+        padding: 10px 0px;
+    }
 `;
 
 const ToDoItem = ({label}: {label: string}) => {
@@ -51,27 +57,29 @@ const ToDoItem = ({label}: {label: string}) => {
     const [isCompleted, setIsCompleted] = useState(false);
 
     return (
-        <div className="checkbox-wrapper">
+        <ToDoItemWrapper>
             <ToDoLabel>
-                <ToDoCheckbox 
-                    type="checkbox" 
-                    checked={isCompleted} 
+                <ToDoCheckbox
+                    type="checkbox"
+                    checked={isCompleted}
                     onChange={() => setIsCompleted((isCompleted) => !isCompleted)}
                 />
                 <ToDoTask $isCompleted={isCompleted}>{label}</ToDoTask>
             </ToDoLabel>
-        </div>
+        </ToDoItemWrapper>
     )
 }
 
 const ToDoList = styled.div`
     display: grid;
     grid-auto-flow: row;
+    flex: 1;
+    grid-auto-rows: 1fr;
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,
-            #212a3b 0px,
-            #212a3b 4px,
+            #9e926a 0px,
+            #9e926a 4px,
             transparent 4px,
             transparent 8px
         );

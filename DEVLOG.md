@@ -147,3 +147,46 @@ A running record of work done to stand up this app.
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
 - Set up Cloudflare Access for single-user gating.
 - Connect the Squarespace/Cloudflare domain to the deployed project.
+
+## 2026-09-08
+
+### List widgets (Events, ToDo) reformatted
+- `EventList`/`ToDoList` switched from a plain flex/grid column to `grid-auto-rows: 1fr` inside a `flex: 1` parent, so rows share the available height evenly instead of packing to content size — needed once [`WidgetCard.tsx`](src/components/WidgetCard.tsx)'s `Card`/`CardBody` also became `display: flex; flex-direction: column` with `flex: 1; min-height: 0` on the body, letting widget content stretch to fill the card instead of collapsing to its natural height.
+- Wrapped each `Event` in a new `EventWrapper` (`display: flex; align-items: center`) so an item can vertically center within its stretched grid row rather than sitting at the row's top edge.
+- Extracted the repeated per-event JSX into an `EventItem({time, title})` component (mirroring `ToDo`'s existing `ToDoItem` pattern) instead of four hand-copied `EventWrapper`/`Event` blocks; caught a `React.PropsWithChildren` type alias declared with `const` instead of `type` in the process (compiled fine at runtime but was semantically wrong).
+- Divider color between list items (`repeating-linear-gradient` on `background-image`, from the 2026-09-03 to-do work) was hardcoded near-black (`#212a3b`) on both widgets — same value as body text, so it read as too heavy against the paper background. Changed to the tape/accent tan (`#9e926a`) on both `EventList` and `ToDoList`.
+
+### Weather widget: daily forecast column layout ([`Weather.tsx`](src/widgets/Weather.tsx))
+- Replaced the placeholder `<h1>`/`<h2>` city/condition text with real structure: `Location` ("Dallas, TX"), `Temperature` (large display number with a CSS-generated `°` via `::after`), and later `Forecast` ("Sunny"), laid out in a `DetailsColumn` beside an `IconColumn` holding the current-conditions icon — composed via a new `WeatherBodyWrapper` grid.
+- Replaced the bare `h4`/`h5` tags in the 5-day forecast row with named styled-components (`ForecastDay`, `ForecastTemps`), switched `DayContainerGrid` from `grid-auto-flow: column` to `flex; justify-content: space-between` so the 5 day-columns spread evenly, and added a dashed `Divider` (same repeating-gradient technique as the list widgets) between the current-conditions section and the forecast row.
+  - First pass at `Divider` didn't render at all — it was an empty `<div>` with a `background-image` but no explicit `height`, and an empty div collapses to 0 height by default, so the gradient had no box to paint into. Fixed with `height: 2px` matching the gradient's `background-size`.
+- Added a `°` after each forecast day's high/low (`{high}° / {low}°`), matching the `Temperature` display.
+
+### Weather icons made resizable ([`WeatherIcons.tsx`](src/widgets/WeatherIcons.tsx))
+- Every icon component gained a `size` prop (`{size = 24}: {size?: number}`) driving both `width`/`height` attributes, so the same icon can render larger for today's conditions (`SunIcon size={96}` in `WeatherBody`) and smaller in the forecast row (`size={36}`, later `size={24}`) without duplicating markup — the `viewBox` stays fixed, so the browser just scales the existing artwork rather than redrawing it.
+
+### Typography: Georgia fallback for small text
+- `body`'s global `font-family: Didot` (a high-contrast display serif) reads fine at large sizes but gets hard to read at small sizes, where its thin hairlines lose definition. Rather than change it globally, scoped `font-family: Georgia` (screen-legible at small sizes) onto the specific small-text components: `ForecastDay`/`ForecastTemps` in Weather, `EventTitle` in Events, `ToDoTask` in ToDo. Large display text (`Location`, `Temperature`, `Forecast`) stayed on Didot.
+
+### High/low temperature: iterating toward a mobile layout
+- Wanted "high / low" inline on wide screens and stacked (`high` then `low`, no separator) on narrow ones. Split `{high}° / {low}°` (a single text node) into separate `High`/`Low` styled-spans so a `@media` breakpoint could independently control layout direction and separator visibility.
+- Hit a pseudo-element collision: both `High`/`Low` set their own `&::after { content: "°" }`, but `ForecastTemps` *also* targeted `::after` on non-last children (`& > *:not(:last-child)::after { content: " / " }`) to inject the separator generically. An element can only have one `::after`; the more specific `ForecastTemps`-scoped selector won out over `High`'s own rule, silently eating its `°`. Resolved by having `High` own its full trailing content directly (`content: "° / "`, dropped to `content: "°"` under the mobile breakpoint) instead of relying on a generic cross-cutting selector.
+- Also lost a few minutes to a plain typo — `content:"°;` (missing closing quote) silently invalidated an entire `@media` block rather than throwing, so the override appeared to just not apply.
+- **Decision reversed**: after seeing it live, the `/` separator looked bad at every screen size, not just mobile. Simplified to always stack high/low vertically with no separator — `ForecastTemps` is unconditionally `flex-direction: column`, `High` keeps its `°`, and `Low` picked up a muted `color: #656669` (previously only applied on mobile) to visually de-emphasize it against the bolder `High` value, now that there's no `/` to separate them visually.
+
+### Responsive pass
+- `WidgetGrid` in [`App.tsx`](src/App.tsx) columns changed from `3fr 3fr 2fr` to `1fr 1fr 1fr` for more even spacing across Weather/Events/ToDo.
+- Added `@media (max-width: 768px)` rules: `ToDoItemWrapper` gets breathing room (`padding: 10px 0px`) between rows on mobile; `WidgetGrid` itself already had (from the 2026-08 wireframe work) a mobile fallback to stack widgets in a single column.
+
+### Next steps
+- Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon` (still open from 2026-08-31).
+- Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
+- To-do items are still hardcoded labels with no persistence, add/remove, or backing data.
+- Remove the now-dead `Title`/`Block`/`BlockBody` styled-components left over in `App.tsx` (still open from 2026-08-31).
+- Decide on a header-vs-dot-grid legibility fix (still open from 2026-08-16).
+- Decide on quote treatment — boxed and taped vs. floating italic (still open from 2026-08-16).
+- Give `Didot` a fallback in the font stack for the remaining large-text elements (currently a bare `font-family: Didot` on `body`).
+- Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
+- Set up Cloudflare Access for single-user gating.
+- Connect the Squarespace/Cloudflare domain to the deployed project.

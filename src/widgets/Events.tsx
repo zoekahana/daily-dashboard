@@ -10,6 +10,7 @@ const EventTime = styled.div`
 
 const EventTitle = styled.div`
     font-size: 20px;
+    font-family: Georgia;
 `;
 
 const Event = styled.div`
@@ -21,15 +22,34 @@ const Event = styled.div`
     padding-bottom: 8px;
 `;
 
-const EventList = styled.div`
+const EventWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+`;
+
+type EventItemProps = React.PropsWithChildren<{
+    time: string;
+    title: string;
+}>;
+
+const EventItem = ({time, title}: EventItemProps) => 
+    <EventWrapper>
+        <Event>
+            <EventTime>{time}</EventTime>
+            <EventTitle>{title}</EventTitle>
+        </Event>
+    </EventWrapper>
+
+const EventList = styled.div`
+    display: grid;
+    grid-auto-flow: row;
+    flex: 1;
+    grid-auto-rows: 1fr;
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,
-            #212a3b 0px,
-            #212a3b 4px,
+            #9e926a 0px,
+            #9e926a 4px,
             transparent 4px,
             transparent 8px
         );
@@ -42,22 +62,10 @@ const EventList = styled.div`
 const Events = () =>
     <WidgetCard title="Events">
         <EventList>
-            <Event>
-                <EventTime>9:00</EventTime>
-                <EventTitle>Coffee with Thomas</EventTitle>
-            </Event>
-            <Event>
-                <EventTime>11:00</EventTime>
-                <EventTitle>Brunch with Thomas</EventTitle>
-            </Event>
-            <Event>
-                <EventTime>12:00</EventTime>
-                <EventTitle>Lunch with Thomas</EventTitle>
-            </Event>
-            <Event>
-                <EventTime>5:00</EventTime>
-                <EventTitle>Pickleball with Thomas</EventTitle>
-            </Event>
+            <EventItem time="9:00" title="Breakfast with Thomas" />
+            <EventItem time="11:00" title="Brunch with Thomas" />
+            <EventItem time="1:00" title="Lunch with Thomas" />
+            <EventItem time="5:00" title="Pickleball with Thomas" />
         </EventList>
     </WidgetCard>
 

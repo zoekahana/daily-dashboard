@@ -56,7 +56,7 @@ const DateSubheader = styled.h2`
 const WidgetGrid = styled.div`
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 3fr 3fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr;
 
   @media (max-width: 768px) {
     grid-auto-flow: row;
