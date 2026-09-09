@@ -40,6 +40,7 @@ const Title = styled.h1`
   color: #a2222b;
   text-align: left;
   font-family: monospace;
+  margin: 10px 0px;
 `
 
 const CardBody = styled.div`
