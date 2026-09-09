@@ -178,6 +178,10 @@ A running record of work done to stand up this app.
 - `WidgetGrid` in [`App.tsx`](src/App.tsx) columns changed from `3fr 3fr 2fr` to `1fr 1fr 1fr` for more even spacing across Weather/Events/ToDo.
 - Added `@media (max-width: 768px)` rules: `ToDoItemWrapper` gets breathing room (`padding: 10px 0px`) between rows on mobile; `WidgetGrid` itself already had (from the 2026-08 wireframe work) a mobile fallback to stack widgets in a single column.
 
+### Google OAuth Integration
+- Set up Google Oauth integration as specified in the following docs: [Google Integration](https://developers.cloudflare.com/cloudflare-one/integrations/identity-providers/google/), [Add a Self-Hosted Application](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/), and [Access Policies](https://developers.cloudflare.com/cloudflare-one/access-controls/policies/).
+- All visitors to the site must log in with Google, and only zoekahana21@gmail.com is permitted access.
+
 ### Next steps
 - Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon` (still open from 2026-08-31).
 - Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
@@ -187,6 +191,3 @@ A running record of work done to stand up this app.
 - Decide on quote treatment — boxed and taped vs. floating italic (still open from 2026-08-16).
 - Give `Didot` a fallback in the font stack for the remaining large-text elements (currently a bare `font-family: Didot` on `body`).
 - Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
-- Set up Google Calendar OAuth credentials and the token exchange/refresh flow.
-- Set up Cloudflare Access for single-user gating.
-- Connect the Squarespace/Cloudflare domain to the deployed project.
