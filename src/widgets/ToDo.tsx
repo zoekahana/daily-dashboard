@@ -10,7 +10,7 @@ const ToDoCheckbox = styled.input`
     width: 2em;
     height: 2em;
     border-radius: 0.25em;
-    margin-right: 0.5em;
+    margin-right: 1em;
     border: 0.2em solid var(--color-card-accent);
     outline: none;
     cursor: pointer;
