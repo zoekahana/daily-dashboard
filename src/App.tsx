@@ -1,12 +1,13 @@
-import './App.css'
 import styled from 'styled-components';
 import Events from './widgets/Events';
+import GlobalStyle from './theme/globalStyles';
 import Quote from './widgets/Quote';
 import ToDo from './widgets/ToDo';
 import Weather from './widgets/Weather';
 
 const App = () => {
   return <>
+    <GlobalStyle />
     <HeaderGrid>
       <Greeting>Good morning, Zoe.</Greeting>
       <DateSubheader>It's August 15, 2026.</DateSubheader>

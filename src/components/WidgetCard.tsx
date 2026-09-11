@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Card = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #ddd4b7;
+  background-color: var(--color-card-background);
   padding: 20px 30px 20px 30px;
   border-radius: 30px;
   margin: 20px;
@@ -18,7 +18,7 @@ const Card = styled.div`
     left: 30px;
     width: 50px;
     height: 12px;
-    background: #1f6e64;
+    background: var(--color-card-accent);
     opacity: 0.6;
     transform: rotate(-2deg);
   }
@@ -30,14 +30,14 @@ const Card = styled.div`
     right: 30px;
     width: 50px;
     height: 12px;
-    background: #1f6e64;
+    background: var(--color-card-accent);
     opacity: 0.6;
     transform: rotate(-2deg);
   }
 `
 
 const Title = styled.h1`
-  color: #a2222b;
+  color: var(--color-title);
   text-align: left;
   font-family: monospace;
   margin: 10px 0px;

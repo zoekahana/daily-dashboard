@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import WidgetCard from '../components/WidgetCard';
 
 const EventTime = styled.div`
-    color: #a2222b;
+    color: var(--color-title);
     font-family: monospace;
     min-width: 100px;
     font-size: 20px;
@@ -48,8 +48,8 @@ const EventList = styled.div`
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,
-            #9e926a 0px,
-            #9e926a 4px,
+            var(--color-divider) 0px,
+            var(--color-divider) 4px,
             transparent 4px,
             transparent 8px
         );

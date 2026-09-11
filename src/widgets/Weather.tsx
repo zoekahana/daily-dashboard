@@ -48,7 +48,7 @@ const Low = styled.span`
     &::after {
         content:"°";
     }
-    color: #656669;
+    color: var(--color-text-muted);
 `;
 
 const DayContainer = ({day, high, low, condition}: DayContainerProps) => {
@@ -108,8 +108,8 @@ const Divider = styled.div`
     height: 2px;
     background-image: repeating-linear-gradient(
         to right,
-        #9e926a 0px,
-        #9e926a 4px,
+        var(--color-divider) 0px,
+        var(--color-divider) 4px,
         transparent 4px,
         transparent 8px
     );
