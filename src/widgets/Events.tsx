@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import WidgetCard from '../components/WidgetCard';
+import EventWrapper from '../components/ListItemWrapper';
+import { dashedDivider } from '../theme/mixins';
 
 const EventTime = styled.div`
     color: var(--color-title);
@@ -10,7 +12,7 @@ const EventTime = styled.div`
 
 const EventTitle = styled.div`
     font-size: 20px;
-    font-family: Georgia;
+    font-family: var(--font-serif);
 `;
 
 const Event = styled.div`
@@ -22,15 +24,10 @@ const Event = styled.div`
     padding-bottom: 8px;
 `;
 
-const EventWrapper = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-type EventItemProps = React.PropsWithChildren<{
+type EventItemProps = {
     time: string;
     title: string;
-}>;
+};
 
 const EventItem = ({time, title}: EventItemProps) => 
     <EventWrapper>
@@ -46,16 +43,7 @@ const EventList = styled.div`
     flex: 1;
     grid-auto-rows: 1fr;
     & > *:not(:last-child) {
-        background-image: repeating-linear-gradient(
-            to right,
-            var(--color-divider) 0px,
-            var(--color-divider) 4px,
-            transparent 4px,
-            transparent 8px
-        );
-        background-position: bottom;
-        background-size: 100% 2px;
-        background-repeat: repeat-x;
+        ${dashedDivider}
     }
 `;
 

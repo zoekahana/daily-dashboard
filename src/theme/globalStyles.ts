@@ -10,12 +10,14 @@ const GlobalStyle = createGlobalStyle`
         --color-text-main: #212a3b;
         --color-text-muted: #656669;
         --color-divider: #9e926a;
+        --font-display: Didot;
+        --font-serif: Georgia;
     }
 
     body {
         background-color: var(--color-page-background);
         color: var(--color-text-main);
-        font-family: Didot;
+        font-family: var(--font-display);
         text-align: center;
         opacity: 0.8;
         background-image: radial-gradient(circle, var(--color-page-background-accent) 1.2px, transparent 1.2px);

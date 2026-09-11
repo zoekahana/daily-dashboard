@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import type { PropsWithChildren } from 'react';
 
 const Card = styled.div`
   display: flex;
   flex-direction: column;
   background-color: var(--color-card-background);
-  padding: 20px 30px 20px 30px;
+  padding: 20px 30px;
   border-radius: 30px;
   margin: 20px;
 
@@ -53,7 +54,7 @@ const CardBody = styled.div`
   margin: 0 20px 0 0;
 `
 
-type WidgetCardProps = React.PropsWithChildren<{
+type WidgetCardProps = PropsWithChildren<{
     title: string;
 }>;
 

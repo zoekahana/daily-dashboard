@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import WidgetCard from '../components/WidgetCard';
+import { dashedDivider, degreeSuffix } from '../theme/mixins';
 import {
     SunIcon,
     CloudyIcon,
@@ -10,12 +11,12 @@ const weatherIcons = {
     cloudy: CloudyIcon,
 } as const;
 
-type DayContainerProps = React.PropsWithChildren<{
+type DayContainerProps = {
     day: string;
     high: number;
     low: number;
     condition: string;
-}>;
+};
 
 const DayContainerFlex = styled.div`
     display: grid;
@@ -27,27 +28,23 @@ const DayContainerFlex = styled.div`
 
 const ForecastDay = styled.div`
     font-size: 14pt;
-    font-family: Georgia;
+    font-family: var(--font-serif);
 `;
 
 const ForecastTemps = styled.div`
     font-size: 12pt;
-    font-family: Georgia;
+    font-family: var(--font-serif);
     display: flex;
     flex-direction: column;
     gap: 10px;
 `;
 
 const High = styled.span`
-    &::after {
-        content:"°";
-    }
+    font-family: var(--font-serif);
+    ${degreeSuffix}
 `;
 
-const Low = styled.span`
-    &::after {
-        content:"°";
-    }
+const Low = styled(High)`
     color: var(--color-text-muted);
 `;
 
@@ -77,9 +74,7 @@ const Location = styled.div`
 
 const Temperature = styled.div`
     font-size: 64pt;
-    &::after {
-        content:"°";
-    }
+    ${degreeSuffix}
 `;
 
 const Forecast = styled.div`
@@ -106,16 +101,7 @@ const IconColumn = styled.div`
 
 const Divider = styled.div`
     height: 2px;
-    background-image: repeating-linear-gradient(
-        to right,
-        var(--color-divider) 0px,
-        var(--color-divider) 4px,
-        transparent 4px,
-        transparent 8px
-    );
-    background-position: bottom;
-    background-size: 100% 2px;
-    background-repeat: repeat-x;
+    ${dashedDivider}
 `;
 
 const WeatherBody = () => 
