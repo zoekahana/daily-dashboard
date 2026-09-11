@@ -40,10 +40,9 @@ const EVENING = "Good evening, Zoe.";
 const NIGHT = "Late night, Zoe.";
 
 function getGreeting(hour: number): string {
-  console.log(hour);
   if (hour >= 5 && hour < 12) return MORNING;
-  if (hour >= 12 && hour < 6) return AFTERNOON;
-  if (hour >= 6 && hour < 11) return EVENING;
+  if (hour >= 12 && hour < 18) return AFTERNOON;
+  if (hour >= 18 && hour < 23) return EVENING;
   return NIGHT;
 }
 

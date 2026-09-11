@@ -218,11 +218,27 @@ A running record of work done to stand up this app.
   - `Events.tsx` imported the shared `ListItemWrapper` under an ad-hoc alias (`import EventWrapper from '../components/ListItemWrapper'`), while `ToDo.tsx` kept the real name and only renamed it when actually extending it with extra styles (`ToDoItemWrapper = styled(ListItemWrapper)`). Dropped the alias in `Events.tsx` so it's imported and used as `ListItemWrapper` directly, matching `ToDo.tsx`'s pattern.
 - Verified: `tsc --noEmit` passes clean and the app renders with no console errors after the rename.
 
+### Header extracted into its own file
+- Moved the header (`HeaderGrid`/`Greeting`/`DateSubheader`) out of `App.tsx` into [`src/Header.tsx`](src/Header.tsx) as its own component.
+
+### Time-based greeting and date
+- Installed `date-fns-tz` for timezone-aware date handling.
+- Greeting and date subheader are now computed from the viewer's local time instead of hardcoded strings (`"Good morning, Zoe."` / `"It's August 15, 2026."`).
+  - `getGreeting(hour)` selects between `MORNING`/`AFTERNOON`/`EVENING`/`NIGHT` constants based on hour ranges, using `Intl.DateTimeFormat().resolvedOptions().timeZone` + `toZonedTime` to read the hour in the viewer's own timezone rather than server/UTC time.
+  - `getDate(isoDateString)` formats the current date as "It's {Weekday}, {Month} {day}." (e.g. "It's Monday, August 15.") via date-fns-tz's `format`, dropping the year.
+- Caught a chained-comparison bug along the way: `if (5 <= hour < 12)` doesn't check a range in JS — `5 <= hour` evaluates first to `true`/`false` (`1`/`0`), which is then compared against `< 12` and is always true, so every hour matched the first branch. Fixed using explicit `&&` (`hour >= 5 && hour < 12`).
+- The `AFTERNOON`/`EVENING` ranges also needed fixing — they'd been copied in as `hour >= 12 && hour < 6` and `hour >= 6 && hour < 11`, which never matched anything (afternoon's condition can't be true; evening's sat entirely inside morning's). Corrected to `hour >= 12 && hour < 18` (afternoon) and `hour >= 18 && hour < 23` (evening), so all four greetings now actually trigger.
+
 ### Next steps
 - Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon` (still open from 2026-08-31).
 - Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
 - To-do items are still hardcoded labels with no persistence, add/remove, or backing data.
 - Decide on a header-vs-dot-grid legibility fix (still open from 2026-08-16).
-- Decide on quote treatment — boxed and taped vs. floating italic (still open from 2026-08-16).
-- Give `Didot` a fallback in the font stack for the remaining large-text elements (currently a bare `font-family: Didot` on `body`).
+- Add the ability to add to-do items.
+- Add the ability to flip through days in the events widget.
+- Add the ability to favorite quotes.
+- Add the ability to look through favorited quotes.
+- Give `Didot` a fallback in the font stack (currently a bare value on `--font-display`).
 - Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow (separate from the Cloudflare Access login gating already in place).
+- Connect the Squarespace/Cloudflare domain to the deployed project.
