@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import WidgetCard from '../components/WidgetCard';
+import ListItemWrapper from '../components/ListItemWrapper';
+import { dashedDivider } from '../theme/mixins';
 
 const ToDoCheckbox = styled.input`
     -webkit-appearance: none;
@@ -31,7 +33,7 @@ const ToDoCheckbox = styled.input`
 const ToDoTask = styled.span<{ $isCompleted: boolean }>`
     color: ${(props) => props.$isCompleted ? "var(--color-text-muted)" : "var(--color-text-main)"};
     text-decoration: ${(props) => props.$isCompleted ? "line-through" : "none"};
-    font-family: Georgia;
+    font-family: var(--font-serif);
 `;
 
 const ToDoLabel = styled.label`
@@ -43,10 +45,7 @@ const ToDoLabel = styled.label`
     font-size: 20px;
 `;
 
-const ToDoItemWrapper = styled.div`
-    display: flex;
-    align-items: center;
-
+const ToDoItemWrapper = styled(ListItemWrapper)`
     @media (max-width: 768px) {
         padding: 10px 0px;
     }
@@ -76,16 +75,7 @@ const ToDoList = styled.div`
     flex: 1;
     grid-auto-rows: 1fr;
     & > *:not(:last-child) {
-        background-image: repeating-linear-gradient(
-            to right,
-            var(--color-divider) 0px,
-            var(--color-divider) 4px,
-            transparent 4px,
-            transparent 8px
-        );
-        background-position: bottom;
-        background-size: 100% 2px;
-        background-repeat: repeat-x;
+        ${dashedDivider}
     }
 `;
 
