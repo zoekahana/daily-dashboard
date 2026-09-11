@@ -9,13 +9,13 @@ const ToDoCheckbox = styled.input`
     height: 2em;
     border-radius: 0.25em;
     margin-right: 0.5em;
-    border: 0.2em solid #1f6e64;
+    border: 0.2em solid var(--color-card-accent);
     outline: none;
     cursor: pointer;
     position: relative;
 
     &:checked {
-        background-color: #1f6e64
+        background-color: var(--color-card-accent)
     }
 
     &:checked::before {
@@ -29,7 +29,7 @@ const ToDoCheckbox = styled.input`
 `;
 
 const ToDoTask = styled.span<{ $isCompleted: boolean }>`
-    color: ${(props) => props.$isCompleted ? "#656669" : "#212a3b"};
+    color: ${(props) => props.$isCompleted ? "var(--color-text-muted)" : "var(--color-text-main)"};
     text-decoration: ${(props) => props.$isCompleted ? "line-through" : "none"};
     font-family: Georgia;
 `;
@@ -78,8 +78,8 @@ const ToDoList = styled.div`
     & > *:not(:last-child) {
         background-image: repeating-linear-gradient(
             to right,
-            #9e926a 0px,
-            #9e926a 4px,
+            var(--color-divider) 0px,
+            var(--color-divider) 4px,
             transparent 4px,
             transparent 8px
         );
