@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import WidgetCard from '../components/WidgetCard';
-import EventWrapper from '../components/ListItemWrapper';
+import ListItemWrapper from '../components/ListItemWrapper';
 import { dashedDivider } from '../theme/mixins';
 
 const EventTime = styled.div`
@@ -29,13 +29,13 @@ type EventItemProps = {
     title: string;
 };
 
-const EventItem = ({time, title}: EventItemProps) => 
-    <EventWrapper>
+const EventItem = ({time, title}: EventItemProps) =>
+    <ListItemWrapper>
         <Event>
             <EventTime>{time}</EventTime>
             <EventTitle>{title}</EventTitle>
         </Event>
-    </EventWrapper>
+    </ListItemWrapper>
 
 const EventList = styled.div`
     display: grid;
