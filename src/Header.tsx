@@ -58,12 +58,6 @@ export default function Header() {
   const zonedDate = toZonedTime(isoDate, timeZone);
   const hour = zonedDate.getHours();
 
-  const displayOptions = {
-    weekday: "long",
-    month: "long", 
-    day: "numeric"
-  };
-
   const greeting = getGreeting(hour);
   console.log(greeting);
   const formattedDate = getDate(isoDate);
