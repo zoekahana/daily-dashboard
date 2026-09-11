@@ -11,14 +11,14 @@ const weatherIcons = {
     cloudy: CloudyIcon,
 } as const;
 
-type DayContainerProps = {
+type WeatherDayProps = {
     day: string;
     high: number;
     low: number;
     condition: string;
 };
 
-const DayContainerFlex = styled.div`
+const WeatherDayColumn = styled.div`
     display: grid;
     grid-auto-flow: row;
     justify-items: center;
@@ -26,12 +26,12 @@ const DayContainerFlex = styled.div`
     margin: 20px 0px 10px 0px;
 `;
 
-const ForecastDay = styled.div`
+const WeatherDayLabel = styled.div`
     font-size: 14pt;
     font-family: var(--font-serif);
 `;
 
-const ForecastTemps = styled.div`
+const WeatherDayTemps = styled.div`
     font-size: 12pt;
     font-family: var(--font-serif);
     display: flex;
@@ -39,49 +39,49 @@ const ForecastTemps = styled.div`
     gap: 10px;
 `;
 
-const High = styled.span`
+const WeatherHigh = styled.span`
     font-family: var(--font-serif);
     ${degreeSuffix}
 `;
 
-const Low = styled(High)`
+const WeatherLow = styled(WeatherHigh)`
     color: var(--color-text-muted);
 `;
 
-const DayContainer = ({day, high, low, condition}: DayContainerProps) => {
+const WeatherDay = ({day, high, low, condition}: WeatherDayProps) => {
     const Icon = weatherIcons[condition as keyof typeof weatherIcons] ?? SunIcon;
     return (
-        <DayContainerFlex>
-            <ForecastDay>{day}</ForecastDay>
+        <WeatherDayColumn>
+            <WeatherDayLabel>{day}</WeatherDayLabel>
             <Icon size={36}/>
-            <ForecastTemps>
-                <High>{high}</High>
-                <Low>{low}</Low>
-            </ForecastTemps>
-        </DayContainerFlex>
+            <WeatherDayTemps>
+                <WeatherHigh>{high}</WeatherHigh>
+                <WeatherLow>{low}</WeatherLow>
+            </WeatherDayTemps>
+        </WeatherDayColumn>
     );
 }
 
-const DayContainerGrid = styled.div`
+const WeatherDayRow = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 `;
 
-const Location = styled.div`
+const WeatherLocation = styled.div`
     font-size: 20pt;
 `;
 
-const Temperature = styled.div`
+const WeatherTemperature = styled.div`
     font-size: 64pt;
     ${degreeSuffix}
 `;
 
-const Forecast = styled.div`
+const WeatherForecast = styled.div`
     font-size: 20pt;
 `;
 
-const DetailsColumn = styled.div`
+const WeatherDetailsColumn = styled.div`
     display: flex;
     flex-direction: column;
 `;
@@ -92,43 +92,43 @@ const WeatherBodyWrapper = styled.div`
     margin: 0px 0px 20px 0px;
 `;
 
-const IconColumn = styled.div`
+const WeatherIconColumn = styled.div`
     display: flex;
     flex: 1;
     justify-content: right;
     align-items: center;
 `;
 
-const Divider = styled.div`
+const WeatherDivider = styled.div`
     height: 2px;
     ${dashedDivider}
 `;
 
-const WeatherBody = () => 
+const WeatherBody = () =>
     <>
         <WeatherBodyWrapper>
-            <DetailsColumn>
-                <Location>Dallas, TX</Location>
-                <Temperature>72</Temperature>
-                <Forecast>Sunny</Forecast>
-            </DetailsColumn>
-            <IconColumn>
+            <WeatherDetailsColumn>
+                <WeatherLocation>Dallas, TX</WeatherLocation>
+                <WeatherTemperature>72</WeatherTemperature>
+                <WeatherForecast>Sunny</WeatherForecast>
+            </WeatherDetailsColumn>
+            <WeatherIconColumn>
                 <SunIcon size={96}/>
-            </IconColumn>
+            </WeatherIconColumn>
         </WeatherBodyWrapper>
     </>
 
-const Weather = () => 
+const Weather = () =>
     <WidgetCard title="Weather">
         <WeatherBody />
-        <Divider />
-        <DayContainerGrid>
-            <DayContainer day="MON" high={68} low={40} condition="cloudy"/>
-            <DayContainer day="TUE" high={90} low={89} condition="sunny"/>
-            <DayContainer day="TUE" high={90} low={89} condition="sunny"/>
-            <DayContainer day="TUE" high={90} low={89} condition="sunny"/>
-            <DayContainer day="TUE" high={90} low={89} condition="sunny"/>
-        </DayContainerGrid>
+        <WeatherDivider />
+        <WeatherDayRow>
+            <WeatherDay day="MON" high={68} low={40} condition="cloudy"/>
+            <WeatherDay day="TUE" high={90} low={89} condition="sunny"/>
+            <WeatherDay day="TUE" high={90} low={89} condition="sunny"/>
+            <WeatherDay day="TUE" high={90} low={89} condition="sunny"/>
+            <WeatherDay day="TUE" high={90} low={89} condition="sunny"/>
+        </WeatherDayRow>
     </WidgetCard>
 
 export default Weather;

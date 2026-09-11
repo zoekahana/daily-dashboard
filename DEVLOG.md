@@ -192,7 +192,31 @@ A running record of work done to stand up this app.
 - Give `Didot` a fallback in the font stack for the remaining large-text elements (currently a bare `font-family: Didot` on `body`).
 - Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
 
+## 2026-09-10
+
+### Theme colors centralized (`clean-up-code` branch)
+- Replaced hardcoded hex colors scattered across [`WidgetCard.tsx`](src/components/WidgetCard.tsx), [`Events.tsx`](src/widgets/Events.tsx), [`ToDo.tsx`](src/widgets/ToDo.tsx), and [`Weather.tsx`](src/widgets/Weather.tsx) with CSS custom properties (`--color-page-background`, `--color-page-background-accent`, `--color-card-background`, `--color-card-accent`, `--color-title`, `--color-text-main`, `--color-text-muted`, `--color-divider`) declared once on `:root`.
+- Deleted `App.css` and moved its rules into a new [`src/theme/globalStyles.ts`](src/theme/globalStyles.ts) (`GlobalStyle`, via styled-components' `createGlobalStyle`), mounted once at the top of `App.tsx`.
+
+### UI refactoring — shared component/mixin extraction
+- Extracted the repeated "flex row, center items" list-item wrapper (previously duplicated as `EventWrapper` in `Events.tsx` and inline in `ToDoItemWrapper`) into a shared [`src/components/ListItemWrapper.tsx`](src/components/ListItemWrapper.tsx). `ToDoItemWrapper` now extends it via `styled(ListItemWrapper)` for its mobile-only padding; `Events.tsx` imports it directly (aliased to `EventWrapper` at the time).
+- Pulled the duplicated `repeating-linear-gradient` dashed-divider CSS (copy-pasted identically across `EventList`, `ToDoList`, and Weather's `Divider`) and the `::after { content: "°" }` degree-sign pattern (duplicated across `High`, `Low`, `Temperature`) into shared `css` mixins in a new [`src/theme/mixins.ts`](src/theme/mixins.ts) (`dashedDivider`, `degreeSuffix`).
+- Added `--font-display`/`--font-serif` CSS variables (Didot/Georgia) to `globalStyles.ts` so widgets reference them instead of repeating bare font names.
+- [`WeatherIcons.tsx`](src/widgets/WeatherIcons.tsx): pulled the shared `<svg>` boilerplate (`width`/`height`/`viewBox`/`xmlns`/`fill`) out of all 9 icon components into one base `Icon` component; each icon now just supplies its `viewBox` and path data as `children`, cutting roughly 100 lines of duplicated markup.
+- `WidgetCardProps` switched from `React.PropsWithChildren<...>` to an imported `PropsWithChildren` (`import type { PropsWithChildren } from 'react'`); `EventItemProps`/`DayContainerProps` dropped an unnecessary `PropsWithChildren` wrapper, since neither type actually took `children`.
+- Minor: `Card`'s padding shorthand simplified from `20px 30px 20px 30px` to `20px 30px`.
+
+### Checkbox spacing tweak
+- `ToDoCheckbox`'s `margin-right` increased from `0.5em` to `1em` for more breathing room next to the label text.
+
 ## 2026-09-11
+
+### Naming audit and standardization (`fix-naming-conventions` branch)
+- Reviewed variable/component naming across the codebase for consistency and fixed three inconsistencies, all confined to [`Weather.tsx`](src/widgets/Weather.tsx) and [`Events.tsx`](src/widgets/Events.tsx):
+  - `Weather.tsx`'s styled components weren't prefixed with the widget name the way `Events`/`ToDo`/`Quote` consistently prefix theirs. Renamed `Location`, `Temperature`, `Forecast`, `Divider`, `DetailsColumn`, `IconColumn`, `High`, `Low`, `ForecastDay`, `ForecastTemps`, `DayContainer`, and `DayContainerProps` to `WeatherLocation`, `WeatherTemperature`, `WeatherForecast`, `WeatherDivider`, `WeatherDetailsColumn`, `WeatherIconColumn`, `WeatherHigh`, `WeatherLow`, `WeatherDayLabel`, `WeatherDayTemps`, `WeatherDay`, and `WeatherDayProps`.
+  - Caught a real bug hiding behind the naming along the way: `DayContainerFlex` was actually `display: grid` and `DayContainerGrid` was actually `display: flex` — each name described the opposite of what it did. Renamed by role instead of the (incorrect) layout mode: `DayContainerFlex` → `WeatherDayColumn` (the single-day stack), `DayContainerGrid` → `WeatherDayRow` (the row of five days).
+  - `Events.tsx` imported the shared `ListItemWrapper` under an ad-hoc alias (`import EventWrapper from '../components/ListItemWrapper'`), while `ToDo.tsx` kept the real name and only renamed it when actually extending it with extra styles (`ToDoItemWrapper = styled(ListItemWrapper)`). Dropped the alias in `Events.tsx` so it's imported and used as `ListItemWrapper` directly, matching `ToDo.tsx`'s pattern.
+- Verified: `tsc --noEmit` passes clean and the app renders with no console errors after the rename.
 
 ### Header extracted into its own file
 - Moved the header (`HeaderGrid`/`Greeting`/`DateSubheader`) out of `App.tsx` into [`src/Header.tsx`](src/Header.tsx) as its own component.
@@ -206,13 +230,14 @@ A running record of work done to stand up this app.
 - The `AFTERNOON`/`EVENING` ranges also needed fixing — they'd been copied in as `hour >= 12 && hour < 6` and `hour >= 6 && hour < 11`, which never matched anything (afternoon's condition can't be true; evening's sat entirely inside morning's). Corrected to `hour >= 12 && hour < 18` (afternoon) and `hour >= 18 && hour < 23` (evening), so all four greetings now actually trigger.
 
 ### Next steps
+- Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon` (still open from 2026-08-31).
+- Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
+- To-do items are still hardcoded labels with no persistence, add/remove, or backing data.
+- Decide on a header-vs-dot-grid legibility fix (still open from 2026-08-16).
 - Add the ability to add to-do items.
 - Add the ability to flip through days in the events widget.
 - Add the ability to favorite quotes.
 - Add the ability to look through favorited quotes.
-- To-do items are still hardcoded labels with no persistence, add/remove, or backing data.
-- Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
-- Decide on a header-vs-dot-grid legibility fix (still open from 2026-08-16).
 - Give `Didot` a fallback in the font stack (currently a bare value on `--font-display`).
 - Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow (separate from the Cloudflare Access login gating already in place).
