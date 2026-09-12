@@ -58,7 +58,6 @@ export default function Header() {
   const hour = zonedDate.getHours();
 
   const greeting = getGreeting(hour);
-  console.log(greeting);
   const formattedDate = getDate(isoDate);
 
   return <HeaderGrid>
