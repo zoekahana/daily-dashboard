@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import WidgetCard from '../components/WidgetCard';
 
@@ -20,12 +21,33 @@ const QuoteBody = styled.div`
     gap: 30px;
 `;
 
-const Quote = () => 
-    <WidgetCard title="Quote">
-        <QuoteBody>
-            <QuoteText>"These woods are lovely, dark, and deep, but I have promises to keep, and miles to go before I sleep, and miles to go before I sleep."</QuoteText>
-            <QuoteSource>- Robert Frost</QuoteSource>
-        </QuoteBody>
-    </WidgetCard>
+interface QuoteData {
+    quote: string,
+    author: string,
+    work: string,
+    categories: string[]
+}
 
-export default Quote
+async function fetchQuote(): Promise<QuoteData[]> {
+  const response = await fetch('/quote');
+  const data = await response.json();
+  return data;
+}
+
+export default function Quote() {
+
+    const [quote, setQuote] = useState<QuoteData[]>([]);
+    useEffect(() => {
+        fetchQuote().then((data) => setQuote(data));
+    }, []);
+    console.log(quote);
+
+    return (
+        <WidgetCard title="Quote">
+            <QuoteBody>
+                <QuoteText>"These woods are lovely, dark, and deep, but I have promises to keep, and miles to go before I sleep, and miles to go before I sleep."</QuoteText>
+                <QuoteSource>- Robert Frost</QuoteSource>
+            </QuoteBody>
+        </WidgetCard>
+    )
+}
