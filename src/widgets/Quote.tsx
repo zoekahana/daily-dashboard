@@ -40,6 +40,7 @@ export default function Quote() {
     useEffect(() => {
         fetchQuote().then((data) => setQuote(data));
     }, []);
+    console.log(quote);
 
     return (
         <WidgetCard title="Quote">
