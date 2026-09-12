@@ -36,17 +36,22 @@ async function fetchQuote(): Promise<QuoteData[]> {
 
 export default function Quote() {
 
-    const [quote, setQuote] = useState<QuoteData[]>([]);
+    const [quoteData, setQuoteData] = useState<QuoteData[]>([]);
     useEffect(() => {
         fetchQuote().then((data) => setQuote(data));
     }, []);
-    console.log(quote);
+    try {
+        const quoteText = quoteData[0].quote;
+        const author = quoteData[0].author;
+    } catch (error: unknown) {
+        console.log("ERROR FETCHING QUOTE: " + error.message);
+    }
 
     return (
         <WidgetCard title="Quote">
             <QuoteBody>
-                <QuoteText>"These woods are lovely, dark, and deep, but I have promises to keep, and miles to go before I sleep, and miles to go before I sleep."</QuoteText>
-                <QuoteSource>- Robert Frost</QuoteSource>
+                <QuoteText>{quoteText}</QuoteText>
+                <QuoteSource>- {author}</QuoteSource>
             </QuoteBody>
         </WidgetCard>
     )
