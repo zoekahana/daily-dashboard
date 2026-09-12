@@ -38,12 +38,12 @@ export default function Quote() {
 
     const [quoteData, setQuoteData] = useState<QuoteData[]>([]);
     useEffect(() => {
-        fetchQuote().then((data) => setQuote(data));
+        fetchQuote().then((data) => setQuoteData(data));
     }, []);
     try {
         const quoteText = quoteData[0].quote;
         const author = quoteData[0].author;
-    } catch (error: unknown) {
+    } catch (error) {
         console.log("ERROR FETCHING QUOTE: " + error.message);
     }
 
