@@ -40,12 +40,9 @@ export default function Quote() {
     useEffect(() => {
         fetchQuote().then((data) => setQuoteData(data));
     }, []);
-    try {
-        const quoteText = quoteData[0].quote;
-        const author = quoteData[0].author;
-    } catch (error) {
-        console.log("ERROR FETCHING QUOTE: " + error.message);
-    }
+    
+    const quoteText = quoteData[0]?.quote ?? '';
+    const author = quoteData[0]?.author ?? '';
 
     return (
         <WidgetCard title="Quote">
