@@ -242,3 +242,32 @@ A running record of work done to stand up this app.
 - Scaffold the Cloudflare Worker backend (`src/worker/index.ts`, `wrangler.toml` with D1 + KV bindings).
 - Set up Google Calendar OAuth credentials and the token exchange/refresh flow (separate from the Cloudflare Access login gating already in place).
 - Connect the Squarespace/Cloudflare domain to the deployed project.
+
+## 2026-09-28
+
+### Quote widget backed by a real API (`fetch-quote-from-api` branch)
+- Started on 2026-09-11 with a Cloudflare Pages Function (`functions/quote.js`), then switched to a single Worker, since this project runs on the unified **Workers with static assets** model rather than classic Pages. Removed `functions/quote.js` and added [`src/worker.ts`](src/worker.ts), pointed to by `"main"` in [`wrangler.jsonc`](wrangler.jsonc). The Worker handles `/quote` and returns 404 for anything else; `assets` still serves the built frontend.
+- Added `@cloudflare/vite-plugin` and `wrangler` as dev dependencies, and registered `cloudflare()` in [`vite.config.ts`](vite.config.ts) so `npm run dev` runs the Worker alongside the React app.
+- `/quote` first returned a hardcoded placeholder to test the frontend wiring, then was switched to calling API Ninjas' `v2/randomquotes`. The key goes in the `X-Api-Key` header, and `exclude_categories=relationships,death` is sent as a comma-separated query param (not a header or an array). The upstream JSON is passed through unchanged.
+- [`Quote.tsx`](src/widgets/Quote.tsx): replaced the hardcoded Robert Frost quote with a `QuoteData` interface, a `fetchQuote()` call to `/quote` in a `useEffect`, and `useState` for the result. It reads `quoteData[0]?.quote ?? ''` and `quoteData[0]?.author ?? ''` so the first render (before the fetch resolves) shows empty strings instead of throwing. An earlier try/catch version was replaced with this.
+- Removed a leftover `console.log(greeting)` from [`Header.tsx`](src/Header.tsx).
+
+### Secrets and local state
+- `API_NINJAS_KEY` is typed via an `Env` interface and read from `env` (the Worker's `fetch` second argument). Locally it lives in `.dev.vars`; in production it should be a Cloudflare **secret**. Added as a plain-text dashboard variable, Cloudflare asks for it to be mirrored into `wrangler.jsonc`'s `vars`, which would commit the key, and `wrangler deploy` wipes dashboard-only plain-text vars. Secrets avoid both problems.
+- Added `.dev.vars` and `.wrangler/` to `.gitignore`, and untracked the `.wrangler/` Miniflare state (local cache/D1/KV/R2/trace SQLite files) that had been committed with the Workers switch. It was rewritten on every `wrangler dev` run.
+
+### Next steps
+- `/quote` has no error handling: a non-OK upstream response (bad key, rate limit) is passed through as a 200, and a non-JSON body throws. Check `res.ok` first.
+- Clean up `worker.ts`: use `async`/`await` instead of `.then()` chains, drop the redundant `Content-Type` header and type annotations.
+- Cache the daily quote in KV so it's one quote per day rather than a new one per page load.
+- Wire `condition` to actually select which weather icon renders per day, instead of always showing `SunIcon` (still open from 2026-08-31).
+- Replace the hardcoded MON/TUE placeholder forecast data with real data once a weather API is chosen.
+- To-do items are still hardcoded labels with no persistence, add/remove, or backing data.
+- Add the ability to add to-do items.
+- Add the ability to flip through days in the events widget.
+- Add the ability to favorite quotes.
+- Add the ability to look through favorited quotes.
+- Give `Didot` a fallback in the font stack (currently a bare value on `--font-display`).
+- Add D1 + KV bindings to `wrangler.jsonc` (the Worker itself now exists at `src/worker.ts`).
+- Set up Google Calendar OAuth credentials and the token exchange/refresh flow (separate from the Cloudflare Access login gating already in place).
+- Connect the Squarespace/Cloudflare domain to the deployed project.
